@@ -4,18 +4,14 @@ input = sys.stdin.readline
 
 N , L = map(int, input().split())
 
-coord = [False] * 1001
-for i in map(int, input().split()):
-    coord[i] = True
-
-# 현재 살펴보고 있는 좌표
-x = 0
+coord = list(map(int, input().split())) #좌표 압축
+coord.sort()
 answer = 0
-while x < 1001:
-    if coord[x]:
+x = 0
+while x <= coord[-1]:
+    if x in coord:
         answer += 1
-        x += L
+        x = x + L
     else:
         x += 1
-
 print(answer)
