@@ -8,28 +8,33 @@ class Solution {
             2. 이전 날짜보다 작은 건 전부 이전 날짜 , 그 이후 큰 건 1로 초기화
             3. 결과를 배열에 넣고 출력
         */
-        List<Integer> list = new ArrayList<>();
+        List<Integer> remainDays = new ArrayList<>();
         for (int i = 0; i < progresses.length; i++) {
             int day = (100 - progresses[i]) / speeds[i];
             if((100 - progresses[i]) % speeds[i] != 0) {
                 day++;
             }
-            list.add(day);
+            remainDays.add(day); // [7, 3, 9]
+            
         }
         
         List<Integer> depoly = new ArrayList<>();
-        for (int i = 0; i < list.size();) {
+        for (int i = 0; i < remainDays.size();) {
             int count = 1;
-            int workDay = list.get(i);
+            int maxDay = remainDays.get(i);
             
-            while(++i < list.size() && workDay >= list.get(i)) {
+            //while(1 < 3 && 7 >= 3) true
+            //while(2 < 3 && 7 >= 9) false return 2 -> count = 1
+            //reutrn 1
+            while(++i < remainDays.size() && maxDay >= remainDays.get(i)) {
                 count++;
             }
-            
             depoly.add(count);
         }
         
+        
         return depoly.stream()
-            .mapToInt(i -> i).toArray();
+            .mapToInt(Integer::intValue)
+            .toArray();
     }
 }
