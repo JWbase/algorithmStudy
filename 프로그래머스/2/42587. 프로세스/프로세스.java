@@ -2,37 +2,52 @@ import java.util.*;
 
 class Solution {
     public int solution(int[] priorities, int location) {
-        Queue<Printer> printQueue = new LinkedList<>();
+        int answer = 0;
+        Queue<Program> program = new LinkedList<>();
         for (int i = 0; i < priorities.length; i++) {
-            printQueue.offer(new Printer(i, priorities[i]));
+            program.offer(new Program(i, priorities[i]));
         }
-
-        int answer = 1;
-
-        while (!printQueue.isEmpty()) {
-            Printer current = printQueue.poll();
-            boolean isMax = printQueue.stream().noneMatch(printer -> printer.priority > current.priority);
-
-            if (isMax) {
-                if (current.location == location) {
+        // [0, 2], [1, 1], [2, 3], [3, 2]
+        // 첫번째 2를 꺼냈는데 우선순위가 젤 높지 않아!
+        // 그래서 얘를 맨뒤에 넣어야 해
+        // 우선 순위가 제일 높은 거를 새로운
+        // [1, 1], [2, 3], [3, 2], [0, 2]
+        // [2, 3], [3, 2], [0, 2], [1, 1]
+        // [2, 3], [3, 2], [0, 2], [1, 1]
+        while (!program.isEmpty()) {
+            Program temp = program.poll();
+            for (Program p : program) {
+                if (p.getPriority() > temp.getPriority()) {
+                    program.offer(temp);
+                    temp = null;
                     break;
                 }
+            }
+            if (temp != null) {
                 answer++;
-            } else {
-                printQueue.offer(current);
+                if (temp.id == location) {
+                    return answer;
+                }
             }
         }
-
         return answer;
     }
-}
 
-class Printer {
-    int location;
-    int priority;
+    class Program {
+        private int id;
+        private int priority;
 
-    public Printer(int location, int priority) {
-        this.location = location;
-        this.priority = priority;
+        public Program(int id, int priority) {
+            this.id = id;
+            this.priority = priority;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public int getPriority() {
+            return priority;
+        }
     }
 }
