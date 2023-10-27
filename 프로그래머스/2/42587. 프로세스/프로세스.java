@@ -1,31 +1,28 @@
 import java.util.*;
 
+/**
+ * priorities	location	return [2, 1, 3, 2]	    2	       1
+ */
 class Solution {
     public int solution(int[] priorities, int location) {
         int answer = 0;
-        Queue<Program> program = new LinkedList<>();
+        Queue<Program> programs = new LinkedList<>(); // [0, 2] , [1, 1] ...
         for (int i = 0; i < priorities.length; i++) {
-            program.offer(new Program(i, priorities[i]));
+            programs.offer(new Program(i, priorities[i]));
         }
-        // [0, 2], [1, 1], [2, 3], [3, 2]
-        // 첫번째 2를 꺼냈는데 우선순위가 젤 높지 않아!
-        // 그래서 얘를 맨뒤에 넣어야 해
-        // 우선 순위가 제일 높은 거를 새로운
-        // [1, 1], [2, 3], [3, 2], [0, 2]
-        // [2, 3], [3, 2], [0, 2], [1, 1]
-        // [2, 3], [3, 2], [0, 2], [1, 1]
-        while (!program.isEmpty()) {
-            Program temp = program.poll();
-            for (Program p : program) {
-                if (p.getPriority() > temp.getPriority()) {
-                    program.offer(temp);
-                    temp = null;
+
+        while (!programs.isEmpty()) {
+            Program currentQueue = programs.poll();
+            for (Program p : programs) {
+                if (p.priority > currentQueue.priority) {
+                    programs.offer(currentQueue);
+                    currentQueue = null;
                     break;
                 }
             }
-            if (temp != null) {
+            if (currentQueue != null) {
                 answer++;
-                if (temp.id == location) {
+                if (currentQueue.location == location) {
                     return answer;
                 }
             }
@@ -33,21 +30,13 @@ class Solution {
         return answer;
     }
 
-    class Program {
-        private int id;
-        private int priority;
+    static class Program {
+        public int location;
+        public int priority;
 
-        public Program(int id, int priority) {
-            this.id = id;
+        public Program(int location, int priority) {
+            this.location = location;
             this.priority = priority;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public int getPriority() {
-            return priority;
         }
     }
 }
