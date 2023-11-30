@@ -5,8 +5,8 @@ import java.util.StringTokenizer;
 
 public class Main {
     static boolean[][] visited = new boolean[29][29];
-    static int[] dx = {0, 0, 1, -1};
-    static int[] dy = {1, -1, 0, 0};
+    static int[] dx = {1, -1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
     static double[] rates = new double[4];
     static int N;
     static double answer;
@@ -25,9 +25,6 @@ public class Main {
     }
 
     private static void dfs(int x, int y, int count, double rate) {
-        if (visited[x][y]) {
-            return;
-        }
         if (count == N) {
             answer += rate;
             return;
@@ -37,7 +34,9 @@ public class Main {
             int newX = x + dx[i];
             int newY = y + dy[i];
 
-            dfs(newX, newY, count + 1, rate * rates[i]);
+            if (!visited[newX][newY]) {
+                dfs(newX, newY, count + 1, rate * rates[i]);
+            }
         }
         visited[x][y] = false;
     }
