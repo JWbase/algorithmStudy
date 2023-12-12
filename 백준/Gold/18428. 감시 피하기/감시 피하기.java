@@ -3,14 +3,15 @@ import java.util.*;
 
 public class Main {
     static int N;
-    static char[][] board;
+    static char[][] map;
     static ArrayList<Node> teachers;
     static int[] dx = {-1, 0, 1, 0};
     static int[] dy = {0, 1, 0, -1};
 
     static class Node {
         int x, y;
-        Node (int x, int y) {
+
+        Node(int x, int y) {
             this.x = x;
             this.y = y;
         }
@@ -19,58 +20,71 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        board = new char[N][N];
+        map = new char[N][N];
         teachers = new ArrayList<>();
 
-        for(int i = 0; i < N; i++){
+        for (int i = 0; i < N; i++) {
             String str = br.readLine();
-            for(int j = 0, index = 0; j < N; j++, index += 2){
-                board[i][j] = str.charAt(index);
-                if(board[i][j] == 'T') teachers.add(new Node(i, j));
-            }
-        }
-
-        if(setObstacle(0)) System.out.println("YES");
-        else System.out.println("NO");
-    }
-
-    static boolean setObstacle(int depth){
-        if(depth == 3){
-            if(check()) return true;
-            else return false;
-        }
-
-        for(int i = 0; i < N; i++){
-            for(int j = 0; j < N; j++){
-                if(board[i][j] == 'X'){
-                    board[i][j] = 'O';
-                    if(setObstacle(depth + 1)) return true;
-                    board[i][j] = 'X';
+            for (int j = 0, idx = 0; j < N; j++, idx += 2) {
+                map[i][j] = str.charAt(idx);
+                if (map[i][j] == 'T') {
+                    teachers.add(new Node(i, j));
                 }
             }
         }
+        if (setObstacle(0)) {
+            System.out.println("YES");
+        } else {
+            System.out.println("NO");
+        }
 
-        return false;
     }
 
-    static boolean check(){
-        for(Node teacher : teachers){
-            for(int i = 0; i < 4; i++){
-                int nx = teacher.x;
-                int ny = teacher.y;
+    static boolean checkObstacle() {
+        for (Node teacher : teachers) {
+            for (int i = 0; i < 4; i++) {
+                int newX = teacher.x;
+                int newY = teacher.y;
 
-                while(true){
-                    nx += dx[i];
-                    ny += dy[i];
+                while (true) {
+                    newX += dx[i];
+                    newY += dy[i];
 
-                    if(nx < 0 || ny < 0 || nx >= N || ny >= N) break;
+                    if (newX < 0 || newY < 0 || newX >= N || newY >= N) {
+                        break;
+                    }
 
-                    if(board[nx][ny] == 'S') return false;
-                    else if(board[nx][ny] == 'O') break;
+                    if (map[newX][newY] == 'S') {
+                        return false;
+                    } else if (map[newX][newY] == 'O') {
+                        break;
+                    }
                 }
             }
         }
-
         return true;
+    }
+
+    static boolean setObstacle(int count) {
+        if (count == 3) {
+            if (checkObstacle()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (map[i][j] == 'X') {
+                    map[i][j] = 'O';
+                    if (setObstacle(count + 1)) {
+                        return true;
+                    }
+                    map[i][j] = 'X';
+                }
+            }
+        }
+        return false;
     }
 }
