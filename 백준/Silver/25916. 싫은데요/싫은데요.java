@@ -24,14 +24,14 @@ public class Main {
     }
 
     private static void twoPointers() {
-        int L = 0, R = 0, sum = 0, answer = 0;
-
-        while (R < N) {
-            sum += A[R++];
-            while (sum > M) {
-                sum -= A[L++];
+        int R = 0, sum = 0, answer = 0;
+        for (int L = 0; L < N; L++) {
+            while (R < N && sum + A[R] <= M) {
+                sum += A[R++];
             }
+
             answer = Math.max(answer, sum);
+            sum -= A[L];
         }
         System.out.println(answer);
     }
