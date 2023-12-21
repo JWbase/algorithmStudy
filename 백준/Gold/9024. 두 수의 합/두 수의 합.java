@@ -1,50 +1,54 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-
-    static int T, n, K, ans;
-    static int[] arr;
+    static int T, N, K, answer;
+    static int[] S;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
         T = Integer.parseInt(br.readLine());
-
-        for (int t = 0; t < T; t++) {
+        for (int i = 0; i < T; i++) {
             st = new StringTokenizer(br.readLine());
-            n = Integer.parseInt(st.nextToken());
+            N = Integer.parseInt(st.nextToken());
             K = Integer.parseInt(st.nextToken());
 
-            arr = new int[n];
+            S = new int[N];
             st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < n; i++) {
-                arr[i] = Integer.parseInt(st.nextToken());
+            for (int j = 0; j < N; j++) {
+                S[j] = Integer.parseInt(st.nextToken());
             }
-
-            Arrays.sort(arr);
-            ans = 0;
-            int left = 0, right = n - 1;
-            int minDiff = Integer.MAX_VALUE;
-
-            while (left < right) {
-                int sum = arr[left] + arr[right];
-                int diff = Math.abs(K - sum);
-
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    ans = 1;
-                } else if (diff == minDiff) {
-                    ans++;
-                }
-
-                if (sum < K) {
-                    left++;
-                } else {
-                    right--;
-                }
-            }
-            System.out.println(ans);
+            Arrays.sort(S);
+            twoPointers();
         }
+    }
+
+    private static void twoPointers() {
+        answer = 0;
+        int left = 0, right = N - 1;
+        int minDiff = Integer.MAX_VALUE;
+
+        while (left < right) {
+            int sum = S[left] + S[right];
+            int diff = Math.abs(K - sum);
+
+            if (diff < minDiff) {
+                minDiff = diff;
+                answer = 1;
+            } else if (diff == minDiff) {
+                answer++;
+            }
+
+            if (sum < K) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        System.out.println(answer);
     }
 }
