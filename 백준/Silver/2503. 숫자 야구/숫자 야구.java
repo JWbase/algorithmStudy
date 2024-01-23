@@ -1,52 +1,48 @@
 import java.util.Scanner;
 
 public class Main {
-    static int N, question[][], possible;
+    private static int N, questions[][], possible;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         N = sc.nextInt();
-        question = new int[N][5];
+        questions = new int[N][5];
+
         for (int i = 0; i < N; i++) {
-            question[i][0] = sc.nextInt();
-            question[i][1] = sc.nextInt();
-            question[i][2] = sc.nextInt();
+            questions[i][0] = sc.nextInt();
+            questions[i][1] = sc.nextInt();
+            questions[i][2] = sc.nextInt();
         }
 
         for (int i = 123; i <= 987; i++) {
-            int hundred = i / 100;
-            int ten = (i / 10) % 10;
-            int one = i % 10;
-
-            if (hundred == ten || hundred == one || ten == one) continue;
-            if (hundred == 0 || ten == 0 || one == 0) continue;
-
-            if (isPossible(i)) possible++;
+            if (isValidNumber(i) && isPossibleAnswer(i)) possible++;
         }
 
         System.out.println(possible);
     }
 
-    static boolean isPossible(int candidate) {
-        for (int i = 0; i < N; i++) {
+    private static boolean isValidNumber(int num) {
+        int hundred = num / 100;
+        int ten = (num / 10) % 10;
+        int one = num % 10;
+
+        return hundred != ten && hundred != one && ten != one && hundred != 0 && ten != 0 && one != 0;
+    }
+
+    private static boolean isPossibleAnswer(int candidate) {
+        for (int[] question : questions) {
             int strike = 0, ball = 0;
-            int qHundred = question[i][0] / 100;
-            int qTen = (question[i][0] / 10) % 10;
-            int qOne = question[i][0] % 10;
 
-            int cHundred = candidate / 100;
-            int cTen = (candidate / 10) % 10;
-            int cOne = candidate % 10;
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if ((question[0] / (int) Math.pow(10, 2 - i) % 10) == (candidate / (int) Math.pow(10, 2 - j) % 10)) {
+                        if (i == j) strike++;
+                        else ball++;
+                    }
+                }
+            }
 
-            if (qHundred == cHundred) strike++;
-            if (qTen == cTen) strike++;
-            if (qOne == cOne) strike++;
-
-            if (qHundred == cTen || qHundred == cOne) ball++;
-            if (qTen == cHundred || qTen == cOne) ball++;
-            if (qOne == cHundred || qOne == cTen) ball++;
-
-            if (strike != question[i][1] || ball != question[i][2]) return false;
+            if (strike != question[1] || ball != question[2]) return false;
         }
         return true;
     }
