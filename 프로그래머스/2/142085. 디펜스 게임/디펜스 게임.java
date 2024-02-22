@@ -2,19 +2,19 @@ import java.util.*;
 
 class Solution {
     public int solution(int n, int k, int[] enemy) {
-int answer = enemy.length;
+        int answer = enemy.length;
         Queue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
 
-        int my = n;
-        int card = k;
+        int remainingSoldiers = n;
+        int remainingShieldUses = k;
         for (int i = 0; i < enemy.length; i++) {
-            my -= enemy[i];
+            remainingSoldiers -= enemy[i];
             pq.add(enemy[i]);
 
-            if (my < 0) {
-                if (card > 0 && !pq.isEmpty()) {
-                    my += pq.poll();
-                    card--;
+            if (remainingSoldiers < 0) {
+                if (remainingShieldUses > 0 && !pq.isEmpty()) {
+                    remainingSoldiers += pq.poll();
+                    remainingShieldUses--;
                 } else {
                     answer = i;
                     break;
