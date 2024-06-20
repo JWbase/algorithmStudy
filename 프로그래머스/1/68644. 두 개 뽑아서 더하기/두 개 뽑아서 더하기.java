@@ -2,22 +2,17 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] numbers) {
-        Set<Integer> resultSet = new HashSet<>();
         
-        for (int i = 0; i < numbers.length; i++) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0 ; i < numbers.length - 1; i++) {
             for (int j = i + 1; j < numbers.length; j++) {
-                resultSet.add(numbers[i] + numbers[j]);
+                set.add(numbers[i] + numbers[j]);
             }
         }
         
-        List<Integer> resultList = new ArrayList<>(resultSet);
-        Collections.sort(resultList);
-        
-        int[] result = new int[resultList.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = resultList.get(i);
-        }
-        
-        return result;
+        return set.stream()
+            .sorted()
+            .mapToInt(Integer::intValue)
+            .toArray();
     }
 }
