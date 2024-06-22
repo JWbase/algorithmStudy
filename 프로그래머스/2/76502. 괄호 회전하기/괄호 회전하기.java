@@ -1,28 +1,33 @@
+import java.util.*;
+
 class Solution {
     public int solution(String s) {
+        HashMap<Character, Character> map = new HashMap<>();
+        map.put(')', '(');
+        map.put(']', '[');
+        map.put('}', '{');
+        
+        int n = s.length();
+        s += s;
         int answer = 0;
         
-        for (int i = 0; i < s.length(); i++) {
-            if (isValid(s)) {
+        A:for (int i = 0; i < n; i++) {
+            Stack<Character> stack = new Stack<>();
+            for (int j = i; j < i + n; j++) {
+                char c = s.charAt(j);
+                if (!map.containsKey(c)) {
+                    stack.push(c);
+                } else {
+                    if (stack.isEmpty() || !stack.pop().equals(map.get(c))) {
+                        continue A;
+                    }
+                }
+            }
+            
+            if (stack.isEmpty()) {
                 answer++;
             }
-            s = rotate(s);
         }
-        
         return answer;
-    }
-        
-         public String rotate(String s) {
-        return s.substring(1, s.length()) + s.charAt(0);
-    }
-    
-    public boolean isValid(String s) {
-        while (s.contains("()") || s.contains("[]") || s.contains("{}")) {
-            s = s.replace("()", "");
-            s = s.replace("[]", "");
-            s = s.replace("{}", "");
-        }
-        
-        return s.length() == 0;
     }
 }
