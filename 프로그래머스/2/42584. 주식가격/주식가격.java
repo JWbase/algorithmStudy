@@ -2,22 +2,26 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] prices) {
-        int[] answer = new int[prices.length];
+        int n = prices.length;
+        int[] answer = new int[n];
+        
         Stack<Integer> stack = new Stack<>();
-
-        for (int i = 0; i < prices.length; i++) {
-            while (!stack.isEmpty() && prices[i] < prices[stack.peek()]) {
-                int index = stack.pop();
-                answer[index] = i - index;
+        stack.push(0);
+        
+        for (int i = 1; i < n; i++) {
+            //만약에 i의 값이 이전의 top() 값보다 작으면 주식이 하락됐으니까 기간을 센다.
+            while(!stack.isEmpty() && prices[i] < prices[stack.peek()]) {
+                int j = stack.pop();
+                answer[j] = i - j;
             }
             stack.push(i);
         }
-
-        while (!stack.isEmpty()) {
-            int index = stack.pop();
-            answer[index] = prices.length - 1 - index;
+        
+        while(!stack.isEmpty()) {
+            int j = stack.pop();
+            answer[j] = n - j - 1;
         }
-
+        
         return answer;
     }
 }
