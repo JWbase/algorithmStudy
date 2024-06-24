@@ -4,16 +4,17 @@ class Solution {
     boolean solution(String s) {
         Stack<Character> stack = new Stack<>();
         
-        char[] a = s.toCharArray();
-        for (char c : a) {
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
             if (c == '(') {
                 stack.push(c);
             } else {
-                if (stack.isEmpty() || stack.pop() == c) {
+                if (stack.isEmpty() || stack.pop() == ')') {
                     return false;
                 }
             }
         }
-        return stack.isEmpty();
+        
+        return stack.isEmpty() ? true : false;
     }
 }
