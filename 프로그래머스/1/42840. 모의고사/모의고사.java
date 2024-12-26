@@ -2,42 +2,30 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] answers) {
-        
-        //수포자들의 패턴
-        int[][] pattern = {
+        int[][] patterns = {
             {1,2,3,4,5},
             {2,1,2,3,2,4,2,5},
             {3,3,1,1,2,2,4,4,5,5}
-        };
+        };        
+        int[] answer = {0, 0, 0};
+
+        for(int i = 0; i < patterns.length; i++) {
+          for (int j = 0; j < answers.length; j++) {
+              if (answers[j] == patterns[i][j % patterns[i].length]) {
+                  answer[i]++;
+              }
+          }  
+        }
+        int maxScore = Arrays.stream(answer).max().getAsInt();
         
-        //수포자들의 점수를 저장할 배열
-        int[] scores = new int[3];
         
-        //각 수포자의 패턴과 정답이 얼마나 일치하였는지 확인
-        for (int i = 0; i < answers.length; i++) {
-            for (int j = 0; j < pattern.length; j++) {
-                if (answers[i] == pattern[j][i % pattern[j].length]) {
-                    scores[j]++;
-                }
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < answer.length; i++) {
+            if (answer[i] == maxScore) {
+                list.add(i + 1);
             }
         }
         
-        //가장 높은 점수 저장
-        int maxScore = Arrays.stream(scores)
-            .max()
-            .getAsInt();
-        
-        //가장 높은 점수를 가진 수포자들의 번호를 찾아서 리스트에 담음
-        List<Integer> answer = new ArrayList<>();
-        for (int i = 0; i < scores.length; i++) {
-            if (scores[i] == maxScore) {
-                answer.add(i + 1);
-            }
-        }
-        
-        return answer.stream()
-            .sorted()
-            .mapToInt(Integer::intValue)
-            .toArray();
+        return list.stream().sorted().mapToInt(Integer::intValue).toArray();
     }
 }
