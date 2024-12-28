@@ -2,16 +2,19 @@ import java.util.*;
 
 class Solution {
     public int solution(String s) {
-        Stack<Character> stack = new Stack<>();
-       
+        Deque<Character> stack = new ArrayDeque<>();
         for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (!stack.isEmpty() && stack.peek() == c) {
-                stack.pop();
+            if (stack.isEmpty() || stack.peek() != s.charAt(i)) {
+                stack.push(s.charAt(i));                
             } else {
-                stack.push(c);
+                stack.pop();
             }
         }
-        return stack.isEmpty() ? 1 : 0;
+        
+        if (stack.isEmpty()) {
+            return 1;
+        }
+        
+        return 0;
     }
 }
